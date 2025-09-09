@@ -11,6 +11,14 @@ use crate::{
     response::{SingleTodoResponse, TodoData, TodoListResponse},
 };
 
+#[utoipa::path(
+    get,
+    path = "/api/healthchecker",
+    responses(
+        (status = 200, description = "Server is healthy")
+    )
+)]
+
 pub async fn health_checker_handler() -> impl IntoResponse {
     const MESSAGE: &str = "Build Simple CRUD API in Rust using Axum";
 
@@ -22,6 +30,17 @@ pub async fn health_checker_handler() -> impl IntoResponse {
     Json(json_response)
 }
 
+#[utoipa::path(
+    get,
+    path = "/api/todos",
+    responses(
+        (status = 200, description = "List all todos", body = TodoListResponse)
+    ),
+    params(
+        ("page" = Option<usize>, Query, description = "Page number"),
+        ("limit" = Option<usize>, Query, description = "Items per page")
+    )
+)]
 pub async fn todos_list_handler(
     opts: Option<Query<QueryOptions>>,
     State(db): State<DB>,
@@ -44,6 +63,15 @@ pub async fn todos_list_handler(
     Json(json_response)
 }
 
+#[utoipa::path(
+    post,
+    path = "/api/todos",
+    request_body = Todo,
+    responses(
+        (status = 201, description = "Todo created successfully", body = SingleTodoResponse),
+        (status = 409, description = "Todo already exists"),
+    )
+)]
 pub async fn create_todo_handler(
     State(db): State<DB>,
     Json(mut body): Json<Todo>,
@@ -78,6 +106,18 @@ pub async fn create_todo_handler(
     Ok((StatusCode::CREATED, Json(json_response)))
 }
 
+#[utoipa::path(
+    get,
+    path = "/api/todos/{id}",
+    responses(
+        (status = 200, description = "Get todo by ID", body = SingleTodoResponse),
+        (status = 404, description = "Todo not found"),
+    ),
+    params(
+        ("id" = Uuid, Path, description = "Todo ID")
+    )
+)]
+
 pub async fn get_todo_handler(
     Path(id): Path<Uuid>,
     State(db): State<DB>,
@@ -100,6 +140,18 @@ pub async fn get_todo_handler(
     Err((StatusCode::NOT_FOUND, Json(error_response)))
 }
 
+#[utoipa::path(
+    patch,
+    path = "/api/todos/{id}",
+    request_body = UpdateTodoSchema,
+    responses(
+        (status = 200, description = "Todo updated successfully", body = SingleTodoResponse),
+        (status = 404, description = "Todo not found"),
+    ),
+    params(
+        ("id" = Uuid, Path, description = "Todo ID")
+    )
+)]
 pub async fn edit_todo_handler(
     Path(id): Path<Uuid>,
     State(db): State<DB>,
@@ -152,6 +204,17 @@ pub async fn edit_todo_handler(
     }
 }
 
+#[utoipa::path(
+    delete,
+    path = "/api/todos/{id}",
+    responses(
+        (status = 204, description = "Todo deleted successfully"),
+        (status = 404, description = "Todo not found"),
+    ),
+    params(
+        ("id" = Uuid, Path, description = "Todo ID")
+    )
+)]
 pub async fn delete_todo_handler(
     Path(id): Path<Uuid>,
     State(db): State<DB>,

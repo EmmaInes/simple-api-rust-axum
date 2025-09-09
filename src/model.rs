@@ -2,9 +2,10 @@ use chrono::prelude::*;
 use serde::{Deserialize, Serialize};
 use std::sync::Arc;
 use tokio::sync::Mutex;
+use utoipa::ToSchema;
 
 #[allow(non_snake_case)]
-#[derive(Debug, Deserialize, Serialize, Clone)]
+#[derive(Debug, Deserialize, Serialize, Clone, ToSchema)]
 pub struct Todo {
     pub id: Option<String>,
     pub title: String,
@@ -20,14 +21,14 @@ pub fn todo_db() -> DB {
     Arc::new(Mutex::new(Vec::new()))
 }
 
-#[derive(Debug, Deserialize, Default)]
+#[derive(Debug, Deserialize, Default, ToSchema)]
 pub struct QueryOptions {
     pub page: Option<usize>,
     pub limit: Option<usize>,
 }
 
 #[allow(non_snake_case)]
-#[derive(Debug, Deserialize, Serialize, Clone)]
+#[derive(Debug, Deserialize, Serialize, Clone, ToSchema)]
 pub struct UpdateTodoSchema {
     pub title: Option<String>,
     pub content: Option<String>,
