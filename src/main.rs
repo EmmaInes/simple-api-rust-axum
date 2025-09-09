@@ -14,6 +14,8 @@ use crate::response::{GenericResponse, TodoData, SingleTodoResponse, TodoListRes
 use crate::model::Todo;
 use utoipa::OpenApi;
 
+use crate::model::UpdateTodoSchema;
+
 #[derive(OpenApi)]
 #[openapi(
     paths(
@@ -25,7 +27,14 @@ use utoipa::OpenApi;
         crate::handler::delete_todo_handler,
     ),
     components(
-        schemas(GenericResponse, TodoData, SingleTodoResponse, TodoListResponse, Todo)
+        schemas(
+            GenericResponse,
+            TodoData,
+            SingleTodoResponse,
+            TodoListResponse,
+            Todo,
+            UpdateTodoSchema // <-- Add this line!
+        )
     ),
     tags(
         (name = "todo", description = "Todo management endpoints.")
