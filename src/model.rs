@@ -4,7 +4,7 @@ use std::sync::Arc;
 use tokio::sync::Mutex;
 
 #[allow(non_snake_case)]
-#[derive(Debug, Default, Deserialize, Serialize, Clone, ToSchema)]
+#[derive(Debug, Deserialize, Serialize, Clone)]
 pub struct Todo {
     pub id: Option<String>,
     pub title: String,

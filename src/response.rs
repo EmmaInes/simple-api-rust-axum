@@ -1,24 +1,24 @@
 use crate::model::Todo;
 use serde::Serialize;
 
-#[derive(Serialize, Debug, ToSchema)]
+#[derive(Serialize)]
 pub struct GenericResponse {
     pub status: String,
     pub message: String,
 }
 
-#[derive(Serialize, Debug, ToSchema)]
+#[derive(Serialize, Debug)]
 pub struct TodoData {
     pub todo: Todo,
 }
 
-#[derive(Serialize, Debug, ToSchema)]
+#[derive(Serialize, Debug)]
 pub struct SingleTodoResponse {
     pub status: String,
     pub data: TodoData,
 }
 
-#[derive(Serialize, Debug, ToSchema)]
+#[derive(Serialize, Debug)]
 pub struct TodoListResponse {
     pub status: String,
     pub results: usize,

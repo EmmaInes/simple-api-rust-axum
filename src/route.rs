@@ -1,14 +1,7 @@
 use axum::{
     routing::{get, post},
-    Json,
     Router,
-    extract::Path,
-    response::IntoResponse,
-    http::StatusCode,
 };
-
-use utoipa::{OpenApi, ToSchema};
-use utoipa_swagger_ui::SwaggerUi;
 
 use crate::{
     handler::{
